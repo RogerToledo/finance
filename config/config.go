@@ -9,6 +9,7 @@ type config struct {
 
 type APIConfig struct {
 	Port string
+	Env  string
 }
 
 type DBConfig struct {
@@ -29,10 +30,15 @@ func Load() error {
 
 	cfg.API = APIConfig{
 		Port: viper.GetString("api.port"),
+		Env:  viper.GetString("api.env"),
 	}
 
-	cfg.DB = DBConfig{
-		StringConn: viper.GetString("db.stringConn"),
+	cfg.DB = DBConfig{}
+
+	if cfg.API.Env != "prod" {
+		cfg.DB.StringConn = viper.GetString("db.stringConnDev")
+	} else {
+		cfg.DB.StringConn = viper.GetString("db.stringConn")
 	}
 
 	return nil
@@ -44,4 +50,8 @@ func DB() DBConfig {
 
 func ServerPort() string {
 	return cfg.API.Port
+}
+
+func Env() string {
+	return cfg.API.Env
 }

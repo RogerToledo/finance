@@ -28,6 +28,6 @@ func InitializeRoutes() {
 	PurchaseRoutes(mux, rep)
 	InstallmentRoutes(mux, rep)
 
-	slog.Info("Server running on port " + config.ServerPort())
+	slog.Info(fmt.Sprintf("Server running on port %s - env: %s", config.ServerPort(), config.Env()))
 	http.ListenAndServe(fmt.Sprintf(":%s", config.ServerPort()), mux)
 }
