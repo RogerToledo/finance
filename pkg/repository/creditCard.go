@@ -25,7 +25,7 @@ func NewRepositoryCreditCard(db *sql.DB) *repositoryCreditCard {
 }
 
 func (r repositoryCreditCard) Create(cc entity.CreditCard) error {
-	query := `INSERT INTO credit_card (id, owner, final_card_num, invoice_closing_day) VALUES ($1, $2, $3, $4)`
+	query := `INSERT INTO credit_card (id, owner, type, final_card_num, invoice_closing_day) VALUES ($1, $2, $3, $4, $5)`
 	stmt, err := r.db.Prepare(query)
 	if err != nil {
 		return fmt.Errorf("error trying prepare statment: %v", err)
@@ -36,7 +36,7 @@ func (r repositoryCreditCard) Create(cc entity.CreditCard) error {
 		return fmt.Errorf("error trying create uuid: %v", err)
 	}
 
-	if _, err = stmt.Exec(id, cc.Owner, cc.FinalCardNum, cc.InvoiceClosingDay); err != nil {
+	if _, err = stmt.Exec(id, cc.Owner, cc.FinalCardNum, cc.Type, cc.InvoiceClosingDay); err != nil {
 		return fmt.Errorf("error trying insert credit card: %v", err)
 	}
 
@@ -51,8 +51,9 @@ func (r repositoryCreditCard) Update(cc entity.CreditCard) error {
 	query := `UPDATE credit_card 
 				SET owner = $1,
 					final_card_num = $2,
-					invoice_closing_day = $3
-				WHERE id = $4`
+					type = $3,
+					invoice_closing_day = $4
+				WHERE id = $5`
 	stmt, err := r.db.Prepare(query)
 	if err != nil {
 		return fmt.Errorf("error trying prepare statment: %v", err)
@@ -98,7 +99,7 @@ func (r repositoryCreditCard) Delete(id uuid.UUID) error {
 }
 
 func (r repositoryCreditCard) FindByID(id uuid.UUID) (entity.CreditCard, error) {
-	query := "SELECT id, owner, final_card_num, invoice_closing_day FROM credit_card WHERE id = $1"
+	query := "SELECT id, owner, type, final_card_num, invoice_closing_day FROM credit_card WHERE id = $1"
 
 	stmt, err := r.db.Prepare(query)
 	if err != nil {
@@ -106,7 +107,7 @@ func (r repositoryCreditCard) FindByID(id uuid.UUID) (entity.CreditCard, error) 
 	}
 
 	var cc entity.CreditCard
-	if err = stmt.QueryRow(id).Scan(&cc.ID, &cc.Owner, &cc.FinalCardNum, &cc.InvoiceClosingDay); err != nil  && err != sql.ErrNoRows{
+	if err = stmt.QueryRow(id).Scan(&cc.ID, &cc.Owner, &cc.FinalCardNum, &cc.Type, &cc.InvoiceClosingDay); err != nil  && err != sql.ErrNoRows{
 		return entity.CreditCard{}, fmt.Errorf("error trying find credit card: %v", err)
 	}
 
@@ -122,7 +123,7 @@ func (r repositoryCreditCard) FindByID(id uuid.UUID) (entity.CreditCard, error) 
 }
 
 func (r repositoryCreditCard) FindAll() ([]entity.CreditCard, error) {
-	query := "SELECT id, owner, final_card_num, invoice_closing_day FROM credit_card order by owner"
+	query := "SELECT id, owner, final_card_num, type, invoice_closing_day FROM credit_card order by owner"
 
 	rows, err := r.db.Query(query)
 	if err != nil {
@@ -133,7 +134,7 @@ func (r repositoryCreditCard) FindAll() ([]entity.CreditCard, error) {
 
 	for rows.Next() {
 		var cc entity.CreditCard
-		if err = rows.Scan(&cc.ID, &cc.Owner, &cc.FinalCardNum, &cc.InvoiceClosingDay); err != nil && err != sql.ErrNoRows {
+		if err = rows.Scan(&cc.ID, &cc.Owner, &cc.FinalCardNum, &cc.Type, &cc.InvoiceClosingDay); err != nil && err != sql.ErrNoRows {
 			return []entity.CreditCard{}, fmt.Errorf("error trying scan credit card: %v", err)
 		}
 

@@ -4,6 +4,7 @@ CREATE TABLE credit_card (
 	id uuid NOT NULL,
 	"owner" varchar(50) NOT NULL,
 	invoice_closing_day int4 NOT NULL,
+	"type" varchar(3) NULL,
 	final_card_num varchar(4) NOT NULL,
 	created_at timestamp DEFAULT now() NOT NULL,
 	update_at timestamp NULL,

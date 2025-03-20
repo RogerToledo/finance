@@ -8,10 +8,11 @@ import (
 )
 
 type CreditCard struct {
-	ID    uuid.UUID `json:"id"`
-	Owner string    `json:"owner"`
-	FinalCardNum string `json:"final_card_num"`
-	InvoiceClosingDay int `json:"invoice_closing_day"`
+	ID                uuid.UUID `json:"id"`
+	Owner             string    `json:"owner"`
+	FinalCardNum      string    `json:"final_card_num"`
+	Type              string    `json:"type"`
+	InvoiceClosingDay int       `json:"invoice_closing_day"`
 }
 
 func (cc *CreditCard) Validate(removeID bool) error {
@@ -22,15 +23,15 @@ func (cc *CreditCard) Validate(removeID bool) error {
 			invalidFields = append(invalidFields, "ID")
 		}
 	}
-	
+
 	if cc.Owner == "" {
 		invalidFields = append(invalidFields, "Owner")
 	}
-	
+
 	if cc.InvoiceClosingDay == 0 {
 		invalidFields = append(invalidFields, "InvoiceClosingDay")
 	}
-	
+
 	if len(invalidFields) > 0 {
 		fields := strings.Join(invalidFields, ", ")
 
