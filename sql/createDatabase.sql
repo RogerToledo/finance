@@ -8,7 +8,7 @@ CREATE TABLE credit_card (
 	created_at timestamp DEFAULT now() NOT NULL,
 	update_at timestamp NULL,
 	CONSTRAINT credit_card_pk PRIMARY KEY (id),
-	CONSTRAINT credit_card_unique UNIQUE (owner)
+	CONSTRAINT credit_card_unique UNIQUE (owner, final_card_num)
 );
 -----------------------------------------------------------------
 CREATE TABLE payment_type (
