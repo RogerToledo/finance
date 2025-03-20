@@ -10,6 +10,7 @@ import (
 type CreditCard struct {
 	ID    uuid.UUID `json:"id"`
 	Owner string    `json:"owner"`
+	FinalCardNum string `json:"final_card_num"`
 	InvoiceClosingDay int `json:"invoice_closing_day"`
 }
 
