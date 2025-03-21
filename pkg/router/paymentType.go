@@ -27,7 +27,7 @@ func PaymentTypeRoutes(mux *http.ServeMux, rep *repository.Repository) {
 		c.PaymentType.FindPaymentTypeByID(w, r)
 	})
 
-	mux.HandleFunc("GET /paymentType", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /paymentTypes", func(w http.ResponseWriter, r *http.Request) {
 		c.PaymentType.FindAllPaymentType(w, r)
 	})
 }
