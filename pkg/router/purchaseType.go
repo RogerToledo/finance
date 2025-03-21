@@ -27,7 +27,7 @@ func PurchaseTypeRoutes(mux *http.ServeMux, rep *repository.Repository) {
 		c.PurchaseType.FindPurchaseTypeByID(w, r)
 	})
 
-	mux.HandleFunc("GET /purchaseType", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /purchaseTypes", func(w http.ResponseWriter, r *http.Request) {
 		c.PurchaseType.FindAllPurchaseTypes(w, r)
 	})
 }
