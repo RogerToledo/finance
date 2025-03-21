@@ -25,7 +25,7 @@ func NewRepositoryCreditCard(db *sql.DB) *repositoryCreditCard {
 }
 
 func (r repositoryCreditCard) Create(cc entity.CreditCard) error {
-	query := `INSERT INTO credit_card (id, owner, type, final_card_num, invoice_closing_day) VALUES ($1, $2, $3, $4, $5)`
+	query := `INSERT INTO credit_card (id, owner, final_card_num, type, invoice_closing_day) VALUES ($1, $2, $3, $4, $5)`
 	stmt, err := r.db.Prepare(query)
 	if err != nil {
 		return fmt.Errorf("error trying prepare statment: %v", err)
@@ -59,7 +59,12 @@ func (r repositoryCreditCard) Update(cc entity.CreditCard) error {
 		return fmt.Errorf("error trying prepare statment: %v", err)
 	}
 
-	if _, err = stmt.Exec(cc.Owner, cc.FinalCardNum, cc.InvoiceClosingDay, cc.ID); err != nil && err != sql.ErrNoRows {
+	if _, err = stmt.Exec(
+		cc.Owner, 
+		cc.FinalCardNum,
+		cc.Type, 
+		cc.InvoiceClosingDay, 
+		cc.ID); err != nil && err != sql.ErrNoRows {
 		return fmt.Errorf("error trying update credit card: %v", err)
 	}
 
@@ -99,7 +104,7 @@ func (r repositoryCreditCard) Delete(id uuid.UUID) error {
 }
 
 func (r repositoryCreditCard) FindByID(id uuid.UUID) (entity.CreditCard, error) {
-	query := "SELECT id, owner, type, final_card_num, invoice_closing_day FROM credit_card WHERE id = $1"
+	query := "SELECT id, owner, final_card_num, type, invoice_closing_day FROM credit_card WHERE id = $1"
 
 	stmt, err := r.db.Prepare(query)
 	if err != nil {
@@ -123,7 +128,18 @@ func (r repositoryCreditCard) FindByID(id uuid.UUID) (entity.CreditCard, error) 
 }
 
 func (r repositoryCreditCard) FindAll() ([]entity.CreditCard, error) {
-	query := "SELECT id, owner, final_card_num, type, invoice_closing_day FROM credit_card order by owner"
+	query := `SELECT 
+				id, 
+				owner, 
+				final_card_num, 
+				CASE
+					WHEN type = 'F' THEN 'Físico'
+					WHEN type = 'V' THEN 'Virtual'
+					WHEN type = 'VT' THEN 'Virtual Temporário'
+				END,
+				invoice_closing_day 
+			FROM credit_card 
+			ORDER BY owner`
 
 	rows, err := r.db.Query(query)
 	if err != nil {

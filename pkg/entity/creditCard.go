@@ -28,6 +28,10 @@ func (cc *CreditCard) Validate(removeID bool) error {
 		invalidFields = append(invalidFields, "Owner")
 	}
 
+	if cc.FinalCardNum == "" {
+		invalidFields = append(invalidFields, "FinalCardNum")
+	}
+
 	if cc.InvoiceClosingDay == 0 {
 		invalidFields = append(invalidFields, "InvoiceClosingDay")
 	}
