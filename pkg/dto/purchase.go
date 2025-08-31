@@ -1,14 +1,12 @@
 package dto
 
 import (
-	"fmt"
-
 	"github.com/google/uuid"
 	"github.com/me/finance/pkg/entity"
 )
 
 type PurchaseRequest struct {
-	ID 			      uuid.UUID `json:"id"`
+	ID                uuid.UUID `json:"id"`
 	Description       string  `json:"description"`
 	Amount            float64 `json:"amount"`
 	Date              string  `json:"date"` 
@@ -44,11 +42,6 @@ type PurchaseResponseTotal struct {
 }
 
 func (p *PurchaseRequest) ToEntity() (entity.Purchase, error) {
-	convertedDate, err := entity.ConverDateDB(p.Date)
-	if err != nil {
-		return entity.Purchase{}, fmt.Errorf("error converting date: %v", err)
-	}
-
 	var installment entity.Installment
 
 	installment.Number = p.InstallmentNumber
@@ -58,7 +51,7 @@ func (p *PurchaseRequest) ToEntity() (entity.Purchase, error) {
 		ID:             p.ID,
 		Description:    p.Description,
 		Amount:         p.Amount,
-		Date:           convertedDate,
+		Date:           p.Date,
 		Installment:    installment,
 		Place:	        p.Place,
 		Paid:	        p.Paid,

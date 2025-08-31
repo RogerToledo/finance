@@ -7,8 +7,8 @@ import (
 	"github.com/me/finance/config"
 	"github.com/me/finance/pkg/db"
 	"github.com/me/finance/pkg/repository"
-	"github.com/sagikazarmark/slog-shim"
 	"github.com/rs/cors"
+	"github.com/sagikazarmark/slog-shim"
 )
 
 func InitializeRoutes() {
@@ -19,14 +19,15 @@ func InitializeRoutes() {
 	}
 
 	rep := repository.NewRepository(db)
-	
+
 	mux := http.NewServeMux()
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3000"}, // Allow your frontend origin
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"*"},
 		AllowCredentials: false, // Important for cookies, authorization headers with CORS
-		Debug:            false,  // Enable for debugging CORS issues
+		Debug:            true, // Enable for debugging CORS issues
 	})
 
 	PersonRoutes(mux, rep)

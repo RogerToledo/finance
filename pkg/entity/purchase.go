@@ -12,7 +12,7 @@ type Purchase struct {
 	Description    string  `json:"description"`
 	Amount         float64 `json:"amount"`
 	Date           string  `json:"date"` 
-	Installment    Installment `json:"installment_number"`
+	Installment    Installment `json:"installment"`
 	Place	       string  `json:"place"`
 	Paid		   bool    `json:"paid"`
 	IDPaymentType  uuid.UUID `json:"id_payment_type"`

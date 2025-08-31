@@ -17,7 +17,7 @@ func ValidateID(idRequest string) (uuid.UUID, error) {
 }
 
 func ConverDateDB(date string) (string, error) {
-	t1, err := time.Parse("02/01/2006", date)
+	t1, err := time.Parse("2006-01-02", date)
 	if err != nil {
 		return "", fmt.Errorf("Error converting date: %v", err)
 	}

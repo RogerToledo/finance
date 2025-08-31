@@ -39,7 +39,7 @@ func PurchaseRoutes(mux *http.ServeMux, rep *repository.Repository) {
 		c.Purchase.FindByPerson(w, r)
 	})
 
-	mux.HandleFunc("GET /purchase", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /purchases", func(w http.ResponseWriter, r *http.Request) {
 		c.Purchase.FindAll(w, r)
 	})
 }
