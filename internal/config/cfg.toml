@@ -1,0 +1,7 @@
+[api]
+port = "8180"
+env = "dev"
+
+[db]
+stringConn    = "postgres://postgres:postgres@localhost:5432/finance?sslmode=disable" 
+stringConnDev = "postgres://postgres:postgres@localhost:5432/finance_dev?sslmode=disable" 
