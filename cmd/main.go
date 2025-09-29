@@ -1,9 +1,16 @@
 package main
 
 import (
-	"github.com/me/application/go/finance/internal/config"
-	"github.com/me/application/go/finance/internal/config/logger"
-	"github.com/me/application/go/finance/internal/handler"
+	"fmt"
+	"net/http"
+	"github.com/me/finance/internal/config"
+	"github.com/me/finance/internal/config/logger"
+	"github.com/me/finance/internal/database"
+	"github.com/me/finance/internal/handler"
+	"github.com/me/finance/internal/repository"
+	"github.com/me/finance/internal/service"
+	"github.com/rs/cors"
+	"github.com/sagikazarmark/slog-shim"
 )
 
 func main() {
@@ -11,7 +18,34 @@ func main() {
 	
 	if err := config.Load(); err != nil {
 		panic(err)
+	}	
+
+	db, err := database.NewDB()
+	if err != nil {
+		slog.Error("error trying to connect to database")
+		return
 	}
 
-	router.InitializeHandler()
-}``
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+        w.WriteHeader(http.StatusOK)
+        w.Write([]byte("OK"))
+    })
+
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:3000"}, // Allow your frontend origin
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"*"},
+		AllowCredentials: false, // Important for cookies, authorization headers with CORS
+		Debug:            false,  // Enable for debugging CORS issues
+	})
+
+	personRepo := repository.NewRepositoryPerson(db)
+	personService := service.NewPersonService(personRepo)
+	personHandler := handler.NewPersonHandler(personService)
+	personHandler.RegisterRoutes(mux)
+
+	slog.Info(fmt.Sprintf("Server running on port %s - env: %s", config.ServerPort(), config.Env()))
+	http.ListenAndServe(fmt.Sprintf(":%s", config.ServerPort()), c.Handler(mux))
+}

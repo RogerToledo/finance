@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/me/application/go/finance/internal/config"
 	_ "github.com/lib/pq"
+	"github.com/me/finance/internal/config"
 )
 
 func NewDB() (*sql.DB, error) {
