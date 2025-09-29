@@ -24,11 +24,15 @@ profile.cov
 go.work
 go.work.sum
 
+# Go module files
+vendor
+
 # env file
 .env
 
 # Editor/IDE
 # .idea/
 # .vscode/
+.vscode
 
 .DS_Store
