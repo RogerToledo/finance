@@ -7,12 +7,12 @@ import (
 	"github.com/google/uuid"
 )
 
-type PaymentType struct {
+type PurchaseType struct {
 	ID   uuid.UUID `json:"id"`
 	Name string    `json:"name"`
 }
 
-func (pt *PaymentType) Validate(removeID bool) error {
+func (pt *PurchaseType) Validate(removeID bool) error {
 	var invalidFields []string
 
 	if !removeID {
@@ -30,7 +30,7 @@ func (pt *PaymentType) Validate(removeID bool) error {
 
 		if len(invalidFields) == 1 {
 			return fmt.Errorf("the field %s is required", fields)
-		}
+		}		
 
 		return fmt.Errorf("the fields %s are required", fields)
 	}

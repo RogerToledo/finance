@@ -57,6 +57,11 @@ func main() {
 	paymentTypeHandler := handler.NewPaymentTypeHandler(paymentTypeService)
 	paymentTypeHandler.RegisterRoutes(mux)
 
+	purchaseTypeRepo := repository.NewRepositoryPurchaseType(db)
+	purchaseTypeService := service.NewPurchaseTypeUseCase(purchaseTypeRepo)
+	purchaseTypeHandler := handler.NewPurchaseTypeHandler(purchaseTypeService)
+	purchaseTypeHandler.RegisterRoutes(mux)
+
 	slog.Info(fmt.Sprintf("Server running on port %s - env: %s", config.ServerPort(), config.Env()))
 	http.ListenAndServe(fmt.Sprintf(":%s", config.ServerPort()), c.Handler(mux))
 }
