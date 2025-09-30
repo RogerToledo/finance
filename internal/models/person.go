@@ -29,10 +29,10 @@ func (p *Person) Validate(removeID bool) error {
 		fields := strings.Join(invalidFields, ", ")
 
 		if len(invalidFields) == 1 {
-			return fmt.Errorf("The field %s is required", fields)
+			return fmt.Errorf("the field %s is required", fields)
 		}
 
-		return fmt.Errorf("The fields %s are required", fields)
+		return fmt.Errorf("the fields %s are required", fields)
 	}
 
 	return nil
