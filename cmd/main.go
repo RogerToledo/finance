@@ -52,6 +52,11 @@ func main() {
 	creditcardHandler := handler.NewCreditCardHandler(creditcardService)
 	creditcardHandler.RegisterRoutes(mux)
 
+	paymentTypeRepo := repository.NewRepositoryPaymentType(db)
+	paymentTypeService := service.NewPaymentTypeService(paymentTypeRepo)
+	paymentTypeHandler := handler.NewPaymentTypeHandler(paymentTypeService)
+	paymentTypeHandler.RegisterRoutes(mux)
+
 	slog.Info(fmt.Sprintf("Server running on port %s - env: %s", config.ServerPort(), config.Env()))
 	http.ListenAndServe(fmt.Sprintf(":%s", config.ServerPort()), c.Handler(mux))
 }
