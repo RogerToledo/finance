@@ -8,7 +8,7 @@ import (
 	"github.com/me/finance/internal/models"
 )
 
-type RepositoryPerson interface {
+type PersonRepository interface {
 	Create(p models.Person) error
 	Update(p models.Person) error
 	Delete(id uuid.UUID) error
@@ -16,15 +16,15 @@ type RepositoryPerson interface {
 	FindAll() ([]models.Person, error)
 }
 
-type repositoryPerson struct {
+type personRepository struct {
 	db *sql.DB
 }
 
-func NewRepositoryPerson(db *sql.DB) *repositoryPerson {
-	return &repositoryPerson{db}
+func NewRepositoryPerson(db *sql.DB) *personRepository {
+	return &personRepository{db}
 }
 
-func (r repositoryPerson) Create(p models.Person) error {
+func (r personRepository) Create(p models.Person) error {
 	query := `INSERT INTO person (id, name) VALUES ($1, $2)`
 	stmt, err := r.db.Prepare(query)
 	if err != nil {
@@ -47,7 +47,7 @@ func (r repositoryPerson) Create(p models.Person) error {
 	return nil
 }
 
-func (r repositoryPerson) Update(p models.Person) error {
+func (r personRepository) Update(p models.Person) error {
 	query := `UPDATE person SET name = $1 WHERE id = $2`
 	stmt, err := r.db.Prepare(query)
 	if err != nil {
@@ -69,7 +69,7 @@ func (r repositoryPerson) Update(p models.Person) error {
 	return nil
 }
 
-func (r repositoryPerson) Delete(id uuid.UUID) error {
+func (r personRepository) Delete(id uuid.UUID) error {
 	query := `DELETE FROM person WHERE id = $1`
 
 	stmt, err := r.db.Prepare(query)
@@ -93,9 +93,9 @@ func (r repositoryPerson) Delete(id uuid.UUID) error {
 	return nil
 }
 
-func (r repositoryPerson) FindByID(id uuid.UUID) (models.Person, error) {
+func (r personRepository) FindByID(id uuid.UUID) (models.Person, error) {
 	query := "SELECT id, name FROM person WHERE id = $1"
-	
+
 	stmt, err := r.db.Prepare(query)
 	if err != nil {
 		return models.Person{}, fmt.Errorf("error trying prepare statment: %v", err)
@@ -117,7 +117,7 @@ func (r repositoryPerson) FindByID(id uuid.UUID) (models.Person, error) {
 	return p, nil
 }
 
-func (r repositoryPerson) FindAll() ([]models.Person, error) {
+func (r personRepository) FindAll() ([]models.Person, error) {
 	query := "SELECT id, name FROM person ORDER BY name"
 
 	rows, err := r.db.Query(query)

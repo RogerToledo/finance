@@ -15,10 +15,10 @@ type PersonService interface {
 }
 
 type Person struct {
-	repositoryPerson repository.RepositoryPerson
+	repositoryPerson repository.PersonRepository
 }
 
-func NewPersonService(r repository.RepositoryPerson) PersonService {
+func NewPersonService(r repository.PersonRepository) PersonService {
 	return &Person{
 		repositoryPerson: r,
 	}
