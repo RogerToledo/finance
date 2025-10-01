@@ -18,7 +18,7 @@ type PurchaseType struct {
 	repository repository.RepositoryPurchaseType
 }
 
-func NewPurchaseTypeUseCase(r repository.RepositoryPurchaseType) PurchaseTypeUseCase {
+func NewPurchaseTypeService(r repository.RepositoryPurchaseType) PurchaseTypeUseCase {
 	return &PurchaseType{
 		repository: r,
 	}

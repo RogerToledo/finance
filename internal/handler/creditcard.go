@@ -94,7 +94,7 @@ func (c *creditCardHandler) UpdateCreditCard(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	HTTPResponse(w, fmt.Sprint("Credit card was updated with success!"), http.StatusOK)
+	HTTPResponse(w, "Credit card was updated with success!", http.StatusOK)
 }
 
 func (c *creditCardHandler) DeleteCreditCard(w http.ResponseWriter, r *http.Request) {

@@ -58,9 +58,19 @@ func main() {
 	paymentTypeHandler.RegisterRoutes(mux)
 
 	purchaseTypeRepo := repository.NewRepositoryPurchaseType(db)
-	purchaseTypeService := service.NewPurchaseTypeUseCase(purchaseTypeRepo)
+	purchaseTypeService := service.NewPurchaseTypeService(purchaseTypeRepo)
 	purchaseTypeHandler := handler.NewPurchaseTypeHandler(purchaseTypeService)
 	purchaseTypeHandler.RegisterRoutes(mux)
+
+	installmentRepo := repository.NewInstallmentRepository(db)
+	installmentService := service.NewInstallmentService(installmentRepo, creditcardRepo)
+	installmentHandler := handler.NewInstallmentHandler(installmentService)
+	installmentHandler.RegisterRoutes(mux)
+
+	purchaseRepo := repository.NewRepositoryPurchase(db)
+	purchaseService := service.NewPurchaseService(purchaseRepo, installmentRepo, creditcardRepo)
+	purchaseHandler := handler.NewPurchaseHandler(purchaseService)
+	purchaseHandler.RegisterRoutes(mux)
 
 	slog.Info(fmt.Sprintf("Server running on port %s - env: %s", config.ServerPort(), config.Env()))
 	http.ListenAndServe(fmt.Sprintf(":%s", config.ServerPort()), c.Handler(mux))
