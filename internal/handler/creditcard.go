@@ -28,23 +28,23 @@ func NewCreditCardHandler(svc service.CreditCardService) CreditCardHandler {
 }
 
 func (h *creditCardHandler) RegisterRoutes(mux *http.ServeMux) {
-	mux.HandleFunc("POST /creditCard", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("POST /v1/creditCards", func(w http.ResponseWriter, r *http.Request) {
 		h.CreateCreditCard(w, r)
 	})
 
-	mux.HandleFunc("PUT /creditCard", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("PUT /v1/creditCards", func(w http.ResponseWriter, r *http.Request) {
 		h.UpdateCreditCard(w, r)
 	})
 
-	mux.HandleFunc("DELETE /creditCard/{id}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("DELETE /v1/creditCards/{id}", func(w http.ResponseWriter, r *http.Request) {
 		h.DeleteCreditCard(w, r)
 	})
 
-	mux.HandleFunc("GET /creditCard/{id}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /v1/creditCards/{id}", func(w http.ResponseWriter, r *http.Request) {
 		h.FindCreditCardByID(w, r)
 	})
 
-	mux.HandleFunc("GET /creditCards", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /v1/creditCards", func(w http.ResponseWriter, r *http.Request) {
 		h.FindAllCreditCards(w, r)
 	})
 }

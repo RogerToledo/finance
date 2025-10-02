@@ -25,19 +25,19 @@ func NewInstallmentHandler(svc service.InstallmentService) InstallmentHandler {
 }
 
 func (h *installmentHandler) RegisterRoutes(mux *http.ServeMux) {
-	mux.HandleFunc("PUT /installment/{id}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("PUT /v1/installments/{id}", func(w http.ResponseWriter, r *http.Request) {
 		h.UpdateInstallment(w, r)
 	})
 
-	mux.HandleFunc("GET /installment/{id}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /v1/installments/{id}", func(w http.ResponseWriter, r *http.Request) {
 		h.FindInstallmentByPurchaseID(w, r)
 	})
 
-	mux.HandleFunc("GET /installment/month/{date}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /v1/installments/month/{date}", func(w http.ResponseWriter, r *http.Request) {
 		h.FindInstallmentByMonth(w, r)
 	})
 
-	mux.HandleFunc("GET /installment/notPaid", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /v1/installments/notPaid", func(w http.ResponseWriter, r *http.Request) {
 		h.FindInstallmentByNotPaid(w, r)
 	})
 }

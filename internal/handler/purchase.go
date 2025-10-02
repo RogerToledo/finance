@@ -31,31 +31,31 @@ func NewPurchaseHandler(svc service.PurchaseService) PurchaseHandler {
 }
 
 func (h *purchaseHandler) RegisterRoutes(mux *http.ServeMux) {
-	mux.HandleFunc("POST /purchase", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("POST /v1/purchases", func(w http.ResponseWriter, r *http.Request) {
 		h.Create(w, r)
 	})
 
-	mux.HandleFunc("PUT /purchase", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("PUT /v1/purchases", func(w http.ResponseWriter, r *http.Request) {
 		h.Update(w, r)
 	})
 
-	mux.HandleFunc("DELETE /purchase/{id}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("DELETE /v1/purchases/{id}", func(w http.ResponseWriter, r *http.Request) {
 		h.Delete(w, r)
 	})
 
-	mux.HandleFunc("GET /purchase/{id}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /v1/purchases/{id}", func(w http.ResponseWriter, r *http.Request) {
 		h.FindByID(w, r)
 	})
 
-	mux.HandleFunc("GET /purchase/date/{date}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /v1/purchases/date/{date}", func(w http.ResponseWriter, r *http.Request) {
 		h.FindByDate(w, r)
 	})
 
-	mux.HandleFunc("GET /purchase/month/{date}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /v1/purchases/month/{date}", func(w http.ResponseWriter, r *http.Request) {
 		h.FindByMonth(w, r)
 	})
 
-	mux.HandleFunc("GET /purchase/person/{id}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /v1/purchases/person/{id}", func(w http.ResponseWriter, r *http.Request) {
 		h.FindByPerson(w, r)
 	})
 
