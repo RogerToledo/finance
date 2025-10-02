@@ -28,23 +28,23 @@ func NewPaymentTypeHandler(svc service.PaymentTypeService) PaymentTypeHandler {
 }
 
 func (h *paymentTypeHandler) RegisterRoutes(mux *http.ServeMux) {
-	mux.HandleFunc("POST /paymentType", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("POST /v1/paymentTypes", func(w http.ResponseWriter, r *http.Request) {
 		h.CreatePaymentType(w, r)
 	})
 	
-	mux.HandleFunc("PUT /paymentType", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("PUT /v1/paymentTypes", func(w http.ResponseWriter, r *http.Request) {
 		h.UpdatePaymentType(w, r)
 	})
 
-	mux.HandleFunc("DELETE /paymentType/{id}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("DELETE /v1/paymentTypes/{id}", func(w http.ResponseWriter, r *http.Request) {
 		h.DeletePaymentType(w, r)
 	})
 
-	mux.HandleFunc("GET /paymentType/{id}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /v1/paymentTypes/{id}", func(w http.ResponseWriter, r *http.Request) {
 		h.FindPaymentTypeByID(w, r)
 	})
 
-	mux.HandleFunc("GET /paymentTypes", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /v1/paymentTypes", func(w http.ResponseWriter, r *http.Request) {
 		h.FindAllPaymentTypes(w, r)
 	})
 }

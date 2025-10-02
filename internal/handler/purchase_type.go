@@ -28,23 +28,23 @@ func NewPurchaseTypeHandler(s service.PurchaseTypeUseCase) PurchaseTypeHandler {
 }
 
 func (h *purchaseTypeHandler) RegisterRoutes(mux *http.ServeMux) {
-	mux.HandleFunc("POST /purchaseType", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("POST /v1/purchaseTypes", func(w http.ResponseWriter, r *http.Request) {
 		h.CreatePurchaseType(w, r)
 	})
 
-	mux.HandleFunc("PUT /purchaseType", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("PUT /v1/purchaseTypes", func(w http.ResponseWriter, r *http.Request) {
 		h.UpdatePurchaseType(w, r)
 	})
 
-	mux.HandleFunc("DELETE /purchaseType/{id}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("DELETE /v1/purchaseTypes/{id}", func(w http.ResponseWriter, r *http.Request) {
 		h.DeletePurchaseType(w, r)
 	})
 
-	mux.HandleFunc("GET /purchaseType/{id}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /v1/purchaseTypes/{id}", func(w http.ResponseWriter, r *http.Request) {
 		h.FindPurchaseTypeByID(w, r)
 	})
 
-	mux.HandleFunc("GET /purchaseTypes", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /v1/purchaseTypes", func(w http.ResponseWriter, r *http.Request) {
 		h.FindAllPurchaseTypes(w, r)
 	})
 }

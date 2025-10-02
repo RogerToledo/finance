@@ -28,23 +28,23 @@ func NewPersonHandler(svc service.PersonService) PersonHandler {
 }
 
 func (h *personHandler) RegisterRoutes(mux *http.ServeMux) {
-	mux.HandleFunc("POST /person", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("POST /v1/persons", func(w http.ResponseWriter, r *http.Request) {
 		h.CreatePerson(w, r)
 	})
 
-	mux.HandleFunc("PUT /person", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("PUT /v1/persons", func(w http.ResponseWriter, r *http.Request) {
 		h.UpdatePerson(w, r)
 	})
 
-	mux.HandleFunc("DELETE /person/{id}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("DELETE /v1/persons/{id}", func(w http.ResponseWriter, r *http.Request) {
 		h.DeletePerson(w, r)
 	})
 
-	mux.HandleFunc("GET /person/{id}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /v1/persons/{id}", func(w http.ResponseWriter, r *http.Request) {
 		h.FindPersonByID(w, r)
 	})
 
-	mux.HandleFunc("GET /persons", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /v1/persons", func(w http.ResponseWriter, r *http.Request) {
 		h.FindAllPersons(w, r)
 	})
 }
