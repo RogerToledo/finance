@@ -47,19 +47,22 @@ func (h *purchaseHandler) RegisterRoutes(mux *http.ServeMux) {
 		h.FindByID(w, r)
 	})
 
-	mux.HandleFunc("GET /v1/purchases/date/{date}", func(w http.ResponseWriter, r *http.Request) {
-		h.FindByDate(w, r)
-	})
+	mux.HandleFunc("GET /v1/purchases", func(w http.ResponseWriter, r *http.Request) {
+		data := r.URL.Query().Get("date")
+		month := r.URL.Query().Get("month")
+		person := r.URL.Query().Get("person")
 
-	mux.HandleFunc("GET /v1/purchases/month/{date}", func(w http.ResponseWriter, r *http.Request) {
-		h.FindByMonth(w, r)
-	})
+		if data != "" {
+			h.FindByDate(w, r)
+			return
+		} else if month != "" {
+			h.FindByMonth(w, r)
+			return
+		} else if person != "" {
+			h.FindByPerson(w, r)
+			return
+		}
 
-	mux.HandleFunc("GET /v1/purchases/person/{id}", func(w http.ResponseWriter, r *http.Request) {
-		h.FindByPerson(w, r)
-	})
-
-	mux.HandleFunc("GET /purchases", func(w http.ResponseWriter, r *http.Request) {
 		h.FindAll(w, r)
 	})
 }
@@ -116,6 +119,7 @@ func (p *purchaseHandler) Update(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		slog.Error(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
 	if err := purchase.Validate(); err != nil {
@@ -139,7 +143,7 @@ func (p *purchaseHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	id, err := models.ValidateID(idRequest)
 	if err != nil {
 		slog.Error(err.Error())
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -159,14 +163,14 @@ func (p *purchaseHandler) FindByID(w http.ResponseWriter, r *http.Request) {
 	id, err := models.ValidateID(idRequest)
 	if err != nil {
 		slog.Error(err.Error())
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	purchase, err := p.service.FindPurchaseByID(id)
 	if err != nil {
 		slog.Error(err.Error())
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
@@ -174,11 +178,17 @@ func (p *purchaseHandler) FindByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *purchaseHandler) FindByDate(w http.ResponseWriter, r *http.Request) {
-	date := r.PathValue("date")
+	date := r.URL.Query().Get("date")
+
+	if date == "" {
+		slog.Error("date parameter is required")
+		http.Error(w, "date parameter is required", http.StatusBadRequest)
+		return
+	}
 
 	if err := models.ValidateDate(date); err != nil {
 		slog.Error(err.Error())
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -193,15 +203,21 @@ func (p *purchaseHandler) FindByDate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *purchaseHandler) FindByMonth(w http.ResponseWriter, r *http.Request) {
-	date := r.PathValue("date")
+	month := r.URL.Query().Get("month")
 
-	if err := models.ValidateYearMonth(date); err != nil {
-		slog.Error(err.Error())
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	if month == "" {
+		slog.Error("month parameter is required")
+		http.Error(w, "month parameter is required", http.StatusBadRequest)
 		return
 	}
 
-	purchases, err := p.service.FindPurchaseByMonth(date)
+	if err := models.ValidateYearMonth(month); err != nil {
+		slog.Error(err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	purchases, err := p.service.FindPurchaseByMonth(month)
 	if err != nil {
 		slog.Error(err.Error())
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -212,12 +228,18 @@ func (p *purchaseHandler) FindByMonth(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *purchaseHandler) FindByPerson(w http.ResponseWriter, r *http.Request) {
-	idRequest := r.PathValue("id")
+	personID := r.URL.Query().Get("person")
 
-	id, err := models.ValidateID(idRequest)
+	if personID == "" {
+		slog.Error("person parameter is required")
+		http.Error(w, "person parameter is required", http.StatusBadRequest)
+		return
+	}
+
+	id, err := models.ValidateID(personID)
 	if err != nil {
 		slog.Error(err.Error())
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
