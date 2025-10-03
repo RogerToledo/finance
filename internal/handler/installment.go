@@ -33,8 +33,14 @@ func (h *installmentHandler) RegisterRoutes(mux *http.ServeMux) {
 		h.FindInstallmentByPurchaseID(w, r)
 	})
 
-	mux.HandleFunc("GET /v1/installments/month/{date}", func(w http.ResponseWriter, r *http.Request) {
-		h.FindInstallmentByMonth(w, r)
+	mux.HandleFunc("GET /v1/installments", func(w http.ResponseWriter, r *http.Request) {
+		month := r.URL.Query().Get("month")
+		if month != "" {
+			h.FindInstallmentByMonth(w, r)
+			return
+		}
+
+		HTTPResponse(w, "Missing 'month' query parameter", http.StatusBadRequest)
 	})
 
 	mux.HandleFunc("GET /v1/installments/notPaid", func(w http.ResponseWriter, r *http.Request) {
@@ -84,7 +90,7 @@ func (i *installmentHandler) FindInstallmentByPurchaseID(w http.ResponseWriter, 
 }
 
 func (i *installmentHandler) FindInstallmentByMonth(w http.ResponseWriter, r *http.Request) {
-	month := r.PathValue("date")
+	month := r.URL.Query().Get("month")
 
 	if err := models.ValidateYearMonth(month); err != nil {
 		slog.Error(err.Error())
